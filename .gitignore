@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+*.swo
+env
+Autobuild
+autobuild
+vim.session
+
