@@ -49,9 +49,14 @@ def chain(arg, *args):
 
 def checked_out(lib, conf):
     url = conf.url
+    src_dir = os.path.join(EXT, lib)
     print chain(
-      'cd ext',
+      'cd '+EXT,
       'if [ ! -d %(lib)s ] ; then git clone %(url)s %(lib)s; fi' % locals()
+    )
+    chain(
+      'cd '+src_dir,
+      'git checkout '+conf.branch
     )
 
 def update(lib, conf):
@@ -64,6 +69,10 @@ def update(lib, conf):
         'git --git-dir=%(git_dir)s show-branch --sha1-name %(local)s' % locals())
     rmsg = chain(
         'git --git-dir=%(git_dir)s show-branch --sha1-name %(remote)s' % locals())
+    chain(
+      'cd '+src_dir,
+      'git checkout '+conf.branch
+    )
     if lmsg != rmsg:
         chain('cd '+src_dir, 'git pull origin %(local)s' % locals())
         build(lib, conf)
@@ -72,6 +81,10 @@ def update(lib, conf):
 
 def build(lib, conf):
     src_dir = os.path.join(EXT, lib)
+    chain(
+      'cd '+src_dir,
+      'git checkout '+conf.branch
+    )
     chain('cd '+src_dir, conf['build-command'])
 
 def install(lib, conf):
