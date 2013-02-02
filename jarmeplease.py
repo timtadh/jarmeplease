@@ -76,7 +76,7 @@ def update(lib, conf):
         if lmsg != rmsg:
             chain('cd '+src_dir, 'git pull origin %(local)s' % locals())
             build(lib, conf)
-    if not check_file_exists(os.path.join(EXT, conf['jar-location'])):
+    if not check_file_exists(os.path.join(src_dir, conf['jar-location'])):
         build(lib, conf)
 
 def build(lib, conf):
@@ -88,7 +88,8 @@ def build(lib, conf):
     chain('cd '+src_dir, conf['build-command'])
 
 def install(lib, conf):
-    src = os.path.join(EXT, conf['jar-location'])
+    src_dir = os.path.join(EXT, lib)
+    src = os.path.join(src_dir, conf['jar-location'])
     dest = os.path.join(EXTLIB, conf['final-name'])
     chain('cp %(src)s %(dest)s' % locals())
 
