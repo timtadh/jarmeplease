@@ -65,18 +65,17 @@ def update(lib, conf):
     local = conf.branch
     remote = 'origin/' + conf.branch
     chain('git --git-dir=%(git_dir)s remote update' % locals())
-    lmsg = chain(
+    tags = chain('cd '+src_dir, 'git tag').split('\n')
+    chain('cd '+src_dir, 'git checkout '+conf.branch)
+    if conf.branch not in tags istag:
+        lmsg = chain(
         'git --git-dir=%(git_dir)s show-branch --sha1-name %(local)s' % locals())
-    rmsg = chain(
+        rmsg = chain(
         'git --git-dir=%(git_dir)s show-branch --sha1-name %(remote)s' % locals())
-    chain(
-      'cd '+src_dir,
-      'git checkout '+conf.branch
-    )
-    if lmsg != rmsg:
-        chain('cd '+src_dir, 'git pull origin %(local)s' % locals())
-        build(lib, conf)
-    elif not check_file_exists(os.path.join(EXT, conf['jar-location'])):
+        if lmsg != rmsg:
+            chain('cd '+src_dir, 'git pull origin %(local)s' % locals())
+            build(lib, conf)
+    if not check_file_exists(os.path.join(EXT, conf['jar-location'])):
         build(lib, conf)
 
 def build(lib, conf):
