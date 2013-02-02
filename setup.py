@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='jarmeplease',
-      version=str(swork.RELEASE),
+      version='git-master',
       description=(
         'A shell enviroment manager. Allows you to easily manage the shell enviroment for'
         'working on various projects.'
