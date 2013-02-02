@@ -66,8 +66,9 @@ def update(lib, conf):
     remote = 'origin/' + conf.branch
     chain('git --git-dir=%(git_dir)s remote update' % locals())
     tags = chain('cd '+src_dir, 'git tag').split('\n')
+    print tags
     chain('cd '+src_dir, 'git checkout '+conf.branch)
-    if conf.branch not in tags istag:
+    if conf.branch not in tags:
         lmsg = chain(
         'git --git-dir=%(git_dir)s show-branch --sha1-name %(local)s' % locals())
         rmsg = chain(
