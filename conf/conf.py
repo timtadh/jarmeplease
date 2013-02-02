@@ -50,6 +50,7 @@ class Section(object):
 
     def __init__(self, d):
 
+        self.__keys = list()
         for k,v in d.iteritems():
             if not (isinstance(v, dict) or isinstance(v, list)):
                 p = property(make_val_get(d, k),_set,_del,
@@ -61,6 +62,15 @@ class Section(object):
                 p = property(make_list_get(d, k),_set,_del,
                     'Property for interacting with "%s"' % k)
             object.__setattr__(self, k, p)
+            self.__keys.append(k)
+
+    def __iter__(self):
+        for k in self.__keys:
+            yield k
+
+    def iteritems(self):
+        for k in self.__keys:
+            yield k, getattr(self, k)
 
     def __repr__(self):
         l = list()
@@ -110,6 +120,10 @@ class BaseConfig(object):
                     sys.exit(2)
         log.debug(' '*4 + str(conf))
         return conf
+
+    def __iter__(self):
+        for k in self._exposed:
+            yield k
 
     def __getattribute__(self, name):
         try:

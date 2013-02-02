@@ -13,7 +13,7 @@ def initialize_logging():
     if logging_initialized: return
     fmt = '%(levelname)-6s %(name)-17s %(message)s'
     root = logging.root
-    root.setLevel(logging.NOTSET)
+    root.setLevel(logging.INFO)
     console = logging.StreamHandler()
     console.setFormatter(logging.Formatter(fmt))
     root.addHandler(console)

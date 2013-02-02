@@ -4,5 +4,5 @@
 #Email: tim.tadh@hackthology.com
 #For licensing see the LICENSE file in the top level directory.
 
-from server_conf import get_conf
+from jarme_conf import get_conf
 

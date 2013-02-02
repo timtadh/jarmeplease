@@ -43,6 +43,7 @@ SCHEMA = {
     '__undefinedkeys__': {
         'scm': scm, # which scm?
         'url': Required(str), # where?
+        'branch': Required(str),
         'jar-location': Required(str), # where will the jar be located?
         'final-name': Required(str), # what do you want the jar called?
         'build-command': Required(str), # how do we build?
@@ -54,11 +55,14 @@ def get_conf(supplied_loc=None):
     global conf
     global CONF_LOADED
     if CONF_LOADED: return conf
+    locs = [LOC_2, LOC_1, supplied_loc]
     valid_locs = [
         loc
-        for loc in [LOC_2, LOC_1, supplied_loc]
+        for loc in locs
         if loc is not None and os.path.exists(loc)
     ]
+    if not valid_locs:
+        raise RuntimeError, "No buildfiles found looked at: %s" % str(locs)
     conf = AutobuildConfig(SCHEMA, valid_locs[0])
     CONF_LOADED = True
     return conf
